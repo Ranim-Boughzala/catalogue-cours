@@ -16,7 +16,7 @@
         <span class="badge badge--langage">{{c.categorie | uppercase}}</span> } @default {
         <span class="badge badge--autre">{{c.categorie | uppercase}}</span> } }
         <p>Durée: {{c.duree}}</p>
-        <p>Places disponibles : {{c.places}}</p>
+        <p>{{ c.places | placesRestantes:10 }}</p>
     </article>
     }@empty {
     <p class="liste-vide">Aucun cours ne correspond à la recherche.</p>
