@@ -1,20 +1,31 @@
-import { Component, signal } from '@angular/core';
-import {ListeCoursComponent} from './composants/liste-cours/liste-cours';
+import { Component,inject } from '@angular/core';
+//import {ListeCoursComponent} from './composants/liste-cours/liste-cours';
 import {EnTete} from './composants/en-tete/en-tete';
 import {PiedPage} from './composants/pied-page/pied-page';
-import {Cours} from './composants/liste-cours/liste-cours';  
-import { DetailCours } from './composants/detail-cours/detail-cours';
+//import { Cours } from './donnees/cours';  
+//import { DetailCours } from './composants/detail-cours/detail-cours';
+import {RouterOutlet,RouterLink,RouterLinkActive,Router} from '@angular/router';
+import { Session } from './services/session';
+@Component({imports:
+  [
+  EnTete,
+  PiedPage,
+  RouterOutlet,
+  RouterLink,
+  RouterLinkActive
+],
 
-@Component({imports: [ListeCoursComponent, EnTete, PiedPage,DetailCours],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
 })  
 
 export class App {
-  //protected readonly title = signal('catalogue-cours');
-  coursSelectionne: Cours | null=null;
-  onSelectionCours(c: Cours){
-    this.coursSelectionne=c;
+  session = inject(Session);
+  private router = inject(Router);
+
+  deconnecter() {
+    this.session.deconnecter();
+    this.router.navigateByUrl('/');
   }
 }

@@ -1,0 +1,11 @@
+<h1>Connexion</h1>
+
+<div>
+    <label for="nom">Votre nom :</label>
+
+    <input id="nom" type="text" [(ngModel)]="nom" placeholder="Entrez votre nom">
+
+    <button (click)="seConnecter()" [disabled]="!nom.trim()">
+    Se connecter
+  </button>
+</div>

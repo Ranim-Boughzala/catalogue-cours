@@ -6,19 +6,35 @@
         <option value="desc">Titre Z → A</option>
     </select>
 </div>
+
 <section class="liste-cours">
-    @for (c of cours | filtreCours:recherche | triCours:tri; track c.titre) {
-    <article class="carte-cours" [class.actif]="c ===coursActif" (click)="selectionner(c)">
+    @for (c of cours | filtreCours:recherche | triCours:tri; track c.id) {
+    <article class="carte-cours" [class.actif]="c === coursActif" [routerLink]="['/cours', c.id]" (click)="selectionner(c)">
+
         <h2>{{ c.titre | tronquer:20 }}</h2>
+
         @switch (c.categorie) { @case ('front-end') {
-        <span class="badge badge--frontend">{{c.categorie | uppercase}}</span> } @case ('Back-end') {
-        <span class="badge badge--backend">{{c.categorie | uppercase}}</span> } @case ('Langage') {
-        <span class="badge badge--langage">{{c.categorie | uppercase}}</span> } @default {
-        <span class="badge badge--autre">{{c.categorie | uppercase}}</span> } }
-        <p>Durée: {{c.duree}}</p>
+        <span class="badge badge--frontend">
+                        {{ c.categorie | uppercase }}
+                    </span> } @case ('Back-end') {
+        <span class="badge badge--backend">
+                        {{ c.categorie | uppercase }}
+                    </span> } @case ('Langage') {
+        <span class="badge badge--langage">
+                        {{ c.categorie | uppercase }}
+                    </span> } @default {
+        <span class="badge badge--autre">
+                        {{ c.categorie | uppercase }}
+                    </span> } }
+
+        <p>Durée : {{ c.duree }}</p>
         <p>{{ c.places | placesRestantes:10 }}</p>
+
+        <span>Voir le détail →</span>
     </article>
-    }@empty {
-    <p class="liste-vide">Aucun cours ne correspond à la recherche.</p>
+    } @empty {
+    <p class="liste-vide">
+        Aucun cours ne correspond à la recherche.
+    </p>
     }
 </section>
