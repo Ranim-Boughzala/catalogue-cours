@@ -2,14 +2,17 @@ import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from
 '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { COURS, Cours } from '../../donnees/cours';
+import { Cours } from '../../donnees/cours';
 import { Session } from '../../services/session';
 import { nomComplet } from '../../validators/nom-complet';
+import { Catalogue } from '../../services/catalogue';
+import { Inscriptions } from '../../services/inscriptions';
 @Component({
 selector: 'app-inscription',
 imports: [ReactiveFormsModule, RouterLink],
 templateUrl: './inscription.html',
 styleUrl: './inscription.css',
+//providers: [Inscriptions],
 })
 export class Inscription implements OnInit {
   private session = inject(Session);
@@ -27,13 +30,16 @@ export class Inscription implements OnInit {
   Validators.minLength(20)]),
   conditions: new FormControl(false, [Validators.requiredTrue]),
   });
-  get cours(): Cours | undefined {
+  /*get cours(): Cours | undefined {
   return COURS.find(c => c.id === Number(this.id));
+  }*/
+  get cours(): Cours | undefined {
+    return this.catalogue.trouver(Number(this.id));
   }
   ngOnInit() {
   // Pré-remplit le nom avec celui de l'utilisateur connecté
   this.form.patchValue({ nom: this.session.nom() });
-  console.log(this.nom.errors);
+  //console.log(this.nom.errors);
   }
   get nom() { return this.form.controls.nom; }
   get email() { return this.form.controls.email; }
@@ -42,20 +48,31 @@ export class Inscription implements OnInit {
   get motivation() { return this.form.controls.motivation; }
   get conditions() { return this.form.controls.conditions; }
 
-  envoyer() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
   
-    const { nom, email } = this.form.value;
-  
-    this.confirmation =
-      `Merci ${nom} ! Votre inscription à « ${this.cours?.titre} » est enregistrée. ` +
-      `Un message de confirmation sera envoyé à ${email}.`;
-  
-    console.log('Inscription :', this.form.value);
-  
-    this.form.reset();
+envoyer() {
+  const cours = this.cours;
+
+  if (this.form.invalid || !cours) {
+    this.form.markAllAsTouched();
+    return;
   }
+
+  const v = this.form.getRawValue();
+
+  this.inscriptions.ajouter({
+    coursId: cours.id,
+    nom: v.nom ?? '',
+    email: v.email ?? '',
+    niveau: v.niveau ?? '',
+    date: new Date()
+  });
+
+  this.confirmation =
+    `Merci ${v.nom} ! Votre inscription à « ${cours.titre} » est enregistrée.`;
+
+  this.form.reset();
+}
+
+  private catalogue = inject(Catalogue);
+  inscriptions = inject(Inscriptions);
   }

@@ -3,7 +3,9 @@
     <a routerLink="/" routerLinkActive="actif" [routerLinkActiveOptions]="{ exact:
 true }">Accueil</a>
     <a routerLink="/cours" routerLinkActive="actif">Catalogue</a>
-    <a routerLink="/mes-inscriptions" routerLinkActive="actif">Mes inscriptions</a> @if (session.connecte()) {
+    <a routerLink="/mes-inscriptions" routerLinkActive="actif">
+        Mes inscriptions ({{ inscriptions.liste().length }})
+      </a> @if (session.connecte()) {
     <span>Bonjour {{ session.nom() }}</span>
     <button (click)="deconnecter()">Déconnexion</button> } @else {
     <a routerLink="/connexion" routerLinkActive="actif">Connexion</a> }

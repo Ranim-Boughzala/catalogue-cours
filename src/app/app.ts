@@ -6,6 +6,7 @@ import {PiedPage} from './composants/pied-page/pied-page';
 //import { DetailCours } from './composants/detail-cours/detail-cours';
 import {RouterOutlet,RouterLink,RouterLinkActive,Router} from '@angular/router';
 import { Session } from './services/session';
+import { Inscriptions } from './services/inscriptions';
 @Component({imports:
   [
   EnTete,
@@ -23,6 +24,7 @@ import { Session } from './services/session';
 export class App {
   session = inject(Session);
   private router = inject(Router);
+  inscriptions = inject(Inscriptions);
 
   deconnecter() {
     this.session.deconnecter();
